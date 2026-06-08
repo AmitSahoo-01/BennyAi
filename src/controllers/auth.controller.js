@@ -99,6 +99,28 @@ export async function login(req,res){
 
 }
 
+// This function will handle the "get-me" route, which is a private route that requires authentication. It will extract the user's information from the JWT token provided in the request headers, and then return the user's information back to the client. If the token is invalid or missing, it will send an appropriate error response back to the client.
+export async function getMe(req,res){
+    const userId = req.user.id;
+
+    const user = await userModel.findById(userId).select("-password");
+
+    if(!user){
+        return res.status(404).json({
+            message:"User not found",
+            success:false,
+            err:"User not found"
+        });
+    }
+
+    res.status(200).json({
+        message:"User fetched successfully",
+        success:true,
+        user
+    });
+    
+}
+
 
 // This function will handle email verification. It will take the token from the query parameters, verify it, and then update the user's verified status in the database. Finally, it will send a response back to the client indicating whether the email verification was successful or not.
 export async function verifyEmail(req,res){
