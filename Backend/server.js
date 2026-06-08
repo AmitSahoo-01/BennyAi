@@ -15,4 +15,4 @@ connectToDB().then(()=>{
     process.exit(1);
 });
 
-testAi();
+// testAi();
