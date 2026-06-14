@@ -5,8 +5,11 @@ import messageModel from "../models/message.model.js";
 export async function sendMessage(req,res) {
     const {message,chat:chatId} = req.body;
     
-
     let title = null,chat = null;
+
+    if (chatId) {
+        chat = await chatModel.findOne({ _id: chatId, user: req.user.id });
+    }
 
     if(!chat){
         title = await generateChatTitle(message);
@@ -15,21 +18,20 @@ export async function sendMessage(req,res) {
             user:req.user.id,
             title
         })
-
     }
     
     const userMessage = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: chat._id,
         content:message,
         role:"user"
     })
 
-    const messages = await messageModel.find({chat:chatId || chat._id});
+    const messages = await messageModel.find({chat: chat._id});
 
     const result = await generateResponse(messages);
 
     const aiResponse = await messageModel.create({
-        chat: chatId || chat._id,
+        chat: chat._id,
         content:result,
         role:"ai"
     })
@@ -51,14 +53,14 @@ export async function getChats(req,res){
 
     const chats = await chatModel.find({user : user.id});
 
-    res.status(204).json({
+    res.status(200).json({
         message:"chats received successfully",
         chats
     });
 };
 
 
-export async function getMessages(req,user){
+export async function getMessages(req,res){
     const {chatId} = req.params;
 
     const chat = await chatModel.findOne({
@@ -84,7 +86,7 @@ export async function getMessages(req,user){
 }
 
 
-export async function deleteChat(req,user){
+export async function deleteChat(req,res){
     const {chatId} = req.params;
 
     const chat = await chatModel.findOneAndDelete({
