@@ -6,3 +6,6 @@ DAY_02
 ->Implementing user login and JWT token generation. 
 Adding input validation for registration and login routes.
 Addling also email verification route.
+
+
+Today i complete the project and start deploying.
