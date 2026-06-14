@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const baseUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/+$/, '') : 'http://localhost:3000';
+
 const api = axios.create({
-    baseURL:import.meta.env.VITE_API_URL,
+    baseURL: `${baseUrl}/api`,
     withCredentials: true,
 });
 
@@ -35,7 +37,7 @@ export async function login({email,password}){
 
 export async function getMe(){
     try{
-        const response = await api.get("/auth/get-me");
+        const response = await api.get("auth/get-me");
         return response.data;
     }catch(error){
         console.error("Error occur during fetching data",error);

@@ -16,7 +16,7 @@ export function useAuth(){
                 password
             });
         }catch(error){
-            dispatch(setError(error.response?.message || "Registration Failed"));
+            dispatch(setError(error.response?.data?.message || "Registration Failed"));
         }finally{
             dispatch(setLoading(false));
         }
@@ -30,8 +30,8 @@ export function useAuth(){
                 password
             });
             dispatch(setUser(data.user));
-        }catch(err){
-            dispatch(setError(error.response?.message || "login Failed"));
+        }catch(error){
+            dispatch(setError(error.response?.data?.message || "login Failed"));
         }finally{
             dispatch(setLoading(false));
         }
@@ -42,8 +42,8 @@ export function useAuth(){
             dispatch(setLoading(true));
             const data = await getMe();
             dispatch(setUser(data.user));
-        }catch(err){
-            dispatch(setError(error.response?.message || "user dat not found."));
+        }catch(error){
+            dispatch(setError(error.response?.data?.message || "user dat not found."));
         }finally{
             dispatch(setLoading(false));
         }

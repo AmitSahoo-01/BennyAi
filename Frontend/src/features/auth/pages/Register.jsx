@@ -82,6 +82,7 @@ const Register = () => {
               Login
             </Link>
           </p>
+          <p>After register check your eamil for verify link.</p>
         </div>
       </div>
     </section>
