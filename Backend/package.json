@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "@langchain/google-genai": "^2.1.31",
+    "@tavily/core": "^0.7.6",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -24,6 +25,7 @@
     "mongoose": "^9.6.1",
     "morgan": "^1.11.0",
     "nodemailer": "^8.0.7",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "zod": "^4.4.3"
   }
 }

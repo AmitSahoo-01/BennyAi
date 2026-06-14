@@ -26,6 +26,6 @@ app.get("/",(req,res)=>{
 
 //  This is where we will add our routes for authentication and other features in the future.
 app.use("/api/auth", authRouter);
-app.use("/api/chat", chatRouter);
+app.use("/api/chats", chatRouter);
 
 export default app;
