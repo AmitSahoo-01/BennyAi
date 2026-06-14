@@ -8,4 +8,5 @@ Adding input validation for registration and login routes.
 Addling also email verification route.
 
 
-Today i complete the project and start deploying.......................
+Today i complete the project and start deploying..............................
+frontend on netlify and backend on render.
