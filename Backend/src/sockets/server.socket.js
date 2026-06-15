@@ -3,9 +3,27 @@ import {Server, Socket} from "socket.io";
 let io;
 
 export function initSocket(httpServer){
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "https://benny-ai.netlify.app"
+    ];
+
+    if (process.env.CLIENT_URL) {
+        const urls = process.env.CLIENT_URL.split(",").map(url => url.trim().replace(/\/$/, ""));
+        allowedOrigins.push(...urls);
+    }
+
     io = new Server(httpServer,{
         cors:{
-            origin:process.env.CLIENT_URL,
+            origin: (origin, callback) => {
+                if (!origin) return callback(null, true);
+                const cleanOrigin = origin.replace(/\/$/, "");
+                if (allowedOrigins.includes(cleanOrigin)) {
+                    return callback(null, true);
+                } else {
+                    return callback(new Error(`Origin ${origin} not allowed by CORS`));
+                }
+            },
             credentials:true
         }
     })

@@ -11,11 +11,32 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());
 app.use(morgan("dev"));
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://benny-ai.netlify.app"
+];
+
+if (process.env.CLIENT_URL) {
+    const urls = process.env.CLIENT_URL.split(",").map(url => url.trim().replace(/\/$/, ""));
+    allowedOrigins.push(...urls);
+}
+
 app.use(cors({
-    origin:process.env.CLIENT_URL,
-    credentials:true,
-    methods:["GET","POST","PUT","DELETE"]
-}))
+    origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        
+        const cleanOrigin = origin.replace(/\/$/, "");
+        
+        if (allowedOrigins.includes(cleanOrigin)) {
+            return callback(null, true);
+        } else {
+            return callback(new Error(`Origin ${origin} not allowed by CORS`));
+        }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+}));
 
 //  Health Check
 app.get("/",(req,res)=>{
