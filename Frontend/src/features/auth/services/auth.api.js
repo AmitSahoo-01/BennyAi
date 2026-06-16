@@ -7,6 +7,16 @@ const api = axios.create({
     withCredentials: true,
 });
 
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => {
+    return Promise.reject(error);
+});
+
 
 export async function register({email,username,password}){
     try {
@@ -28,6 +38,9 @@ export async function login({email,password}){
             email,
             password
         });
+        if (response.data && response.data.token) {
+            localStorage.setItem("token", response.data.token);
+        }
         return response.data;
     } catch (error) {
         console.error("Error during login:", error);

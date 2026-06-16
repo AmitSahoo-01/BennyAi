@@ -5,8 +5,13 @@ const tavily = Tavily({
 });
 
 export const searchInternet = async ({query}) =>{
-    const result = await tavily.search(query,{
-        maxResults:"3"
-    })
-    return JSON.stringify(result);
+    try {
+        const result = await tavily.search(query,{
+            maxResults: 3
+        })
+        return JSON.stringify(result);
+    } catch (error) {
+        console.error("Tavily search error:", error.message || error);
+        return JSON.stringify({ error: "Internet search failed", results: [] });
+    }
 }

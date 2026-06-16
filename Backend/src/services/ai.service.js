@@ -5,7 +5,7 @@ import { searchInternet } from "./internet.service.js";
 import { ChatMistralAI } from "@langchain/mistralai";
 
 const model = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash-lite",
+  model: "gemini-2.0-flash",
   apiKey: process.env.API_KEY,
 });
 
@@ -33,6 +33,7 @@ const agent = createAgent({
 
 
 export async function generateResponse(messages) {
+    try {
         const response = await agent.invoke({
           messages:messages.map(msg => {
           if(msg.role == "user"){
@@ -40,7 +41,7 @@ export async function generateResponse(messages) {
           }else if(msg.role == "ai"){
             return new AIMessage(msg.content)
           }
-        })
+        }).filter(Boolean)
         });
 
         const lastMessageContent = response.messages[response.messages.length - 1].content;
@@ -52,15 +53,24 @@ export async function generateResponse(messages) {
                 .join("");
         }
         return "";
+    } catch (error) {
+        console.error("AI generateResponse error:", error.message || error);
+        throw new Error(`AI response generation failed: ${error.message}`);
+    }
 }
 
 export async function generateChatTitle(message){
-    const response = await miModel.invoke([
-        new SystemMessage(`You are a helpfull assistant that generates concise and descriptive titles for chat conversations.
-          User will provide you with the frist message of a chat conversation,and you will generate a title that captures the essence of the conversation in 2-4 words.The title should be clear,relevant and engaging,giving users a quick understanding of the chats topic. `),
-          new HumanMessage(
-            `generate a title for a chat conversation based on the following message: "${message}"`
-          )
-    ])
-    return response.content;
+    try {
+        const response = await miModel.invoke([
+            new SystemMessage(`You are a helpfull assistant that generates concise and descriptive titles for chat conversations.
+              User will provide you with the frist message of a chat conversation,and you will generate a title that captures the essence of the conversation in 2-4 words.The title should be clear,relevant and engaging,giving users a quick understanding of the chats topic. `),
+              new HumanMessage(
+                `generate a title for a chat conversation based on the following message: "${message}"`
+              )
+        ])
+        return response.content;
+    } catch (error) {
+        console.error("AI generateChatTitle error:", error.message || error);
+        return "New Chat";
+    }
 }
