@@ -16,3 +16,5 @@ If you are developing a production application, we recommend using TypeScript wi
 this is the frontend architecture that follow 4 layer of architecteure named as feature based architecture and we use redux here for props or state dealing.
 
 and Here i use socket.io for communication.
+
+i successfully deploy it in netlify and i am proud of that by this i enhanced my debugging skills and more.
