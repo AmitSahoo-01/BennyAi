@@ -5,7 +5,7 @@ import { searchInternet } from "./internet.service.js";
 import { ChatMistralAI } from "@langchain/mistralai";
 
 const model = new ChatGoogleGenerativeAI({
-  model: "gemini-2.0-flash",
+  model: "gemini-2.5-flash",
   apiKey: process.env.API_KEY,
 });
 
